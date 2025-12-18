@@ -34,8 +34,7 @@ if (result.errors.length) {
 	console.error(result.errors)
 }
 
-write_manifest()
-
+await write_manifest()
 Deno.mkdirSync(args.output, { recursive: true })
 await Promise.all(
 	result.outputFiles.map(
@@ -43,7 +42,7 @@ await Promise.all(
 	)
 )
 
-function write_manifest() {
+async function write_manifest() {
 	let js: string | null = null
 	let css: string | null = null
 	for (const file of result.outputFiles) {
@@ -66,6 +65,20 @@ function write_manifest() {
 	Deno.writeTextFileSync(args.output + '/.clite.ts',
 `export const js = '${js}'
 export const css = '${css}'
+export const git_describe = '${await read_git()}'
 export const last_modified = new Date(${Date.now()})
 `)
+}
+
+async function read_git() {
+	// git describe --tags --dirty --always
+	const cmd = new Deno.Command('git', {
+		args: ['describe', '--tags', '--dirty', '--always'],
+	})
+	const result = await cmd.output()
+	return new TextDecoder().decode(
+		result.success
+			? result.stdout
+			: result.stderr
+	).trim()
 }
