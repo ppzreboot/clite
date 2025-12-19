@@ -2,5 +2,8 @@
 	"name": "@clite/serve",
 	"version": "0.0.0",
 	"exports": "./mod.ts",
-	"license": "UNLICENSED"
+	"license": "UNLICENSED",
+	"imports": {
+		"@std/media-types": "jsr:@std/media-types@^1.1.0"
+	}
 }
