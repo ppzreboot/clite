@@ -10,13 +10,16 @@ interface I_clite_meta {
 	url_prefix: string
 }
 
-/** @param filename 安全处理过的静态文件名 */
+/**
+ * Serve 由 @clite/compile 生成的静态文件
+ * @param filename 安全处理过的静态文件名
+ */
 export
 async function serve_clite(
 	meta: I_clite_meta,
 	filename: string,
 	is_head: boolean,
-) {
+): Promise<Response> {
 	const path = `${meta.outdir}/${filename}`
 	const valid = await valid_file(path)
 	if (valid === 'file not exist')
