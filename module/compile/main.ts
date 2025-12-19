@@ -1,7 +1,7 @@
 import { parseArgs } from '@std/cli'
 import { build } from 'esbuild'
 import { denoPlugin } from '@deno/esbuild-plugin'
-import { file_loader } from "./file-loader.ts";
+import { file_loader, exists, read_git } from './util.ts'
 
 const args = parseArgs(Deno.args, {
 	string: ['input', 'output'],
@@ -71,29 +71,6 @@ async function write_manifest() {
 	js: '${js}',
 	css: ${css === null ? 'null' : `'${css}'`},
 	git_describe: '${await read_git()}',
-	last_modified: new Date(${Date.now()}),
+	last_compiled: new Date(${Date.now()}),
 }`)
-}
-
-async function read_git() {
-	// git describe --tags --dirty --always
-	const cmd = new Deno.Command('git', {
-		args: ['describe', '--tags', '--dirty', '--always'],
-	})
-	const result = await cmd.output()
-	return new TextDecoder().decode(
-		result.success
-			? result.stdout
-			: result.stderr
-	).trim()
-}
-
-async function exists(path: string): Promise<boolean> {
-  try {
-    await Deno.stat(path)
-    return true
-  } catch (err) {
-    if (err instanceof Deno.errors.NotFound) return false
-    throw err
-  }
 }
