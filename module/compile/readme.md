@@ -10,9 +10,9 @@ deno run -A jsr:@clite/compile --input=mod.ts --output=.out
 
 ```
 Options:
-  -i, --input         输入文件 (default: "mod.ts")
-  -o, --output        输出目录 (default: ".out")
-  -p, --prefix        url 前缀 (default: "/")
+	-i, --input         输入文件 (default: "mod.ts")
+	-o, --output        输出目录 (default: ".out")
+	-p, --prefix        url 前缀 (default: "/")
 	-a, --asset         不需编译、几乎不变的静态文件的目录 (default: "asset")
 
 Examples:
