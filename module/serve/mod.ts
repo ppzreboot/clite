@@ -25,7 +25,7 @@ async function serve_clite(
 
 	const init: ResponseInit = {
 		headers: {
-			'Content-Type': contentType(filename) || 'application/octet-stream',
+			'Content-Type': contentType('.' + filename.split('.').pop()!) || 'application/octet-stream',
 			'Cache-Control': 'public, max-age=31536000, immutable', // 全是带 hash 的文件，因此永久有效
 			'ETag': '"' + filename + '"',
 			/* meta.last_compiled 只是上次编译的时间，而多次编译时，某些文件可能并未改动
