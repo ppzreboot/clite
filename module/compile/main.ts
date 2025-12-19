@@ -1,5 +1,6 @@
 import { parseArgs } from '@std/cli'
 import { build } from 'esbuild'
+import { denoPlugin } from '@deno/esbuild-plugin'
 
 const args = parseArgs(Deno.args, {
 	string: ['input', 'output'],
@@ -23,6 +24,7 @@ const result = await build({
 		'.webp': 'file',
 		'.ttf': 'file',
 	},
+	plugins: [denoPlugin()],
 })
 
 if (result.warnings.length) {
@@ -34,8 +36,10 @@ if (result.errors.length) {
 	console.error(result.errors)
 }
 
+if (await exists(args.output))
+	await Deno.remove(args.output, { recursive: true })
+await Deno.mkdir(args.output, { recursive: true })
 await write_manifest()
-Deno.mkdirSync(args.output, { recursive: true })
 await Promise.all(
 	result.outputFiles.map(
 		file => Deno.writeFile(file.path, file.contents)
@@ -81,4 +85,14 @@ async function read_git() {
 			? result.stdout
 			: result.stderr
 	).trim()
+}
+
+async function exists(path: string): Promise<boolean> {
+  try {
+    await Deno.stat(path)
+    return true
+  } catch (err) {
+    if (err instanceof Deno.errors.NotFound) return false
+    throw err
+  }
 }

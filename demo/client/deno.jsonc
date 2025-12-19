@@ -5,5 +5,8 @@
   },
   "imports": {
     "hyperapp": "npm:hyperapp@^2.0.22"
+  },
+  "compilerOptions": {
+    "lib": ["dom"]
   }
 }
