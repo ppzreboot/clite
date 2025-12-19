@@ -1,6 +1,7 @@
 import { parseArgs } from '@std/cli'
 import { build } from 'esbuild'
 import { denoPlugin } from '@deno/esbuild-plugin'
+import { file_loader } from "./file-loader.ts";
 
 const args = parseArgs(Deno.args, {
 	string: ['input', 'output'],
@@ -19,11 +20,7 @@ const result = await build({
 	entryNames: '[name]-[hash]',
 	treeShaking: true,
 	minify: false,
-	loader: {
-		'.png': 'file',
-		'.webp': 'file',
-		'.ttf': 'file',
-	},
+	loader: file_loader,
 	plugins: [denoPlugin()],
 })
 
@@ -62,16 +59,20 @@ async function write_manifest() {
 				throw Error('multiple css files found')
 		}
 	}
-	if (js === null || css === null) {
-		console.error({ js, css })
-		throw Error('no js or css file')
+	if (js === null) {
+		console.error({ js })
+		throw Error('no js file')
 	}
-	Deno.writeTextFileSync(args.output + '/.clite.ts',
-`export const js = '${js}'
-export const css = '${css}'
-export const git_describe = '${await read_git()}'
-export const last_modified = new Date(${Date.now()})
-`)
+	if (css === null)
+		console.warn('no css file')
+	Deno.writeTextFileSync(args.output + '/.meta.ts',
+`export default {
+	outdir: import.meta.dirname!,
+	js: '${js}',
+	css: ${css === null ? 'null' : `'${css}'`},
+	git_describe: '${await read_git()}',
+	last_modified: new Date(${Date.now()}),
+}`)
 }
 
 async function read_git() {
