@@ -4,16 +4,28 @@ import { denoPlugin } from '@deno/esbuild-plugin'
 import { file_loader, exists, read_git } from './util.ts'
 
 const args = parseArgs(Deno.args, {
-	string: ['input', 'output'],
+	alias: {
+		i: 'input',
+		o: 'output',
+		p: 'prefix',
+	},
+	string: [
+		'input',
+		'output',
+		'prefix',
+	],
 	default: {
-		input: './mod.ts',
-		output: './.out',
+		input: 'mod.ts',
+		output: '.out',
+		prefix: '/',
 	},
 })
 
 const result = await build({
 	entryPoints: [args.input], // 高贵的简单应用
 	outdir: args.output,
+	// https://esbuild.github.io/api/#public-path
+	publicPath: args.prefix,
 	format: 'esm',
 	bundle: true,
 	write: false,
@@ -67,10 +79,14 @@ async function write_manifest() {
 		console.warn('no css file')
 	Deno.writeTextFileSync(args.output + '/.meta.ts',
 `export default {
-	outdir: import.meta.dirname!,
-	js: '${js}',
-	css: ${css === null ? 'null' : `'${css}'`},
 	git_describe: '${await read_git()}',
 	last_compiled: new Date(${Date.now()}),
+
+	js: '${js}',
+	css: ${css === null ? 'null' : `'${css}'`},
+ 	/** meta.outdir + meta.js = 本地文件路径（绝对路径） */
+	outdir: import.meta.dirname!,
+ 	/** 域名 + meta.url_prefix + meta.js = http 访问路径（绝对路径） */
+	url_prefix: '${args.prefix}',
 }`)
 }

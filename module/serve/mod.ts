@@ -2,11 +2,12 @@ import { contentType } from '@std/media-types'
 
 export
 interface I_clite_meta {
-	outdir: string
-	js: string
-	css: string
 	git_describe: string
 	last_compiled: Date
+	js: string
+	css: string
+	outdir: string
+	url_prefix: string
 }
 
 /** @param filename 安全处理过的静态文件名 */

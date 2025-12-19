@@ -3,7 +3,7 @@ import clite_meta from './.clite/.meta.ts'
 
 console.log(clite_meta.git_describe, clite_meta.last_compiled)
 
-Deno.serve({ port: 9000 },
+Deno.serve({ port: 20001 },
 	req => {
 		const url = new URL(req.url)
 
@@ -23,8 +23,7 @@ Deno.serve({ port: 9000 },
 		}
 
 		console.log('loading clite', req.method, req.url)
-		// const filename = url.pathname.slice(7) // '/static/***'
-		const filename = url.pathname.slice(1) // '/static/***'
+		const filename = url.pathname.slice(clite_meta.url_prefix.length)
 		return serve_clite(clite_meta, filename, req.method === 'HEAD')
 	}
 )
@@ -36,8 +35,8 @@ const html = `
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>clite demo</title>
-	<link rel="stylesheet" href="/${clite_meta.css}">
-	<script src="/${clite_meta.js}"></script>
+	<link rel="stylesheet" href="${clite_meta.url_prefix}/${clite_meta.css}">
+	<script src="${clite_meta.url_prefix}/${clite_meta.js}"></script>
 </head>
 <body>
 	<h1>Hello, World!</h1>
