@@ -13,6 +13,7 @@ Options:
   -i, --input         输入文件 (default: "mod.ts")
   -o, --output        输出目录 (default: ".out")
   -p, --prefix        url 前缀 (default: "/")
+	-a, --asset         不需编译、几乎不变的静态文件的目录 (default: "asset")
 
 Examples:
   deno run -A jsr:@clite/compile -i=main.ts -o=../server/.clite -p=/static
@@ -50,6 +51,8 @@ export default {
 	outdir: import.meta.dirname!,
  	/** 域名 + meta.url_prefix + meta.js = http 访问路径（绝对路径） */
 	url_prefix: '/static',
+
+	asset_prefix: '/static/asset',
 }
 ```
 

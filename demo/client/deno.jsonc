@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "compile": "deno run -A @clite/compile -o=../server/.clite -p /static"
+    "compile": "deno run -A @clite/compile -o=../server/.clite -p /static -a=asset"
     // "compile": "deno run -A @clite/compile"
   },
   "imports": {

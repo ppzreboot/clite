@@ -1,9 +1,11 @@
 import { serve_clite } from '@clite/serve'
 import clite_meta from './.clite/.meta.ts'
 
-console.log(clite_meta.git_describe, clite_meta.last_compiled)
+console.log(clite_meta)
 
-Deno.serve({ port: 20001 },
+Deno.serve({
+	port: Math.random() * 6000 | 0 + 10000, // random port in [10000, 16000)
+},
 	req => {
 		const url = new URL(req.url)
 
@@ -13,7 +15,7 @@ Deno.serve({ port: 20001 },
 		}
 
 		if (req.method === 'GET' && url.pathname === '/') {
-			console.log('loading html')
+			console.log('serve html')
 			return new Response(html, {
 				headers: {
 					'Content-Type': 'text/html; charset=UTF-8',
@@ -22,9 +24,8 @@ Deno.serve({ port: 20001 },
 			})
 		}
 
-		console.log('loading clite', req.method, req.url)
-		const filename = url.pathname.slice(clite_meta.url_prefix.length)
-		return serve_clite(clite_meta, filename, req.method === 'HEAD')
+		console.log('serve clite', req.method, url.pathname)
+		return serve_clite(clite_meta, url.pathname, req.method === 'HEAD')
 	}
 )
 
@@ -34,6 +35,7 @@ const html = `
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="${clite_meta.url_prefix}/asset/favicon.ico">
 	<title>clite demo</title>
 	<link rel="stylesheet" href="${clite_meta.url_prefix}/${clite_meta.css}">
 	<script src="${clite_meta.url_prefix}/${clite_meta.js}"></script>
