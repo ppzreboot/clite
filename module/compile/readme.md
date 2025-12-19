@@ -16,8 +16,8 @@ Options:
 	-a, --asset         不需编译、几乎不变的静态文件的目录 (default: "asset")
 
 Examples:
-  deno run -A jsr:@clite/compile -i=main.ts -o=../server/.clite -p=/static
-  deno run -A jsr:@clite/compile # 全用默认值
+	deno run -A jsr:@clite/compile -i=main.ts -o=../server/.clite -p=/static
+	deno run -A jsr:@clite/compile # 全用默认值
 ```
 
 #### 关于 `--prefix`
@@ -47,9 +47,9 @@ export default {
 
 	js: 'mod-5K2C2HLU.js',
 	css: 'mod-ZOTHATSA.css',
- 	/** meta.outdir + meta.js = 本地文件路径（绝对路径） */
+	/** meta.outdir + meta.js = 本地文件路径（绝对路径） */
 	outdir: import.meta.dirname!,
- 	/** 域名 + meta.url_prefix + meta.js = http 访问路径（绝对路径） */
+	/** 域名 + meta.url_prefix + meta.js = http 访问路径（绝对路径） */
 	url_prefix: '/static',
 
 	asset_prefix: '/static/asset',
