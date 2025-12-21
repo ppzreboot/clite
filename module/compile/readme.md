@@ -2,11 +2,16 @@
 
 [Source Code](https://github.com/ppzreboot/clite/tree/main/module/compile)
 
-简单：珍贵、高贵
-
 ``` bash
 deno run -A jsr:@clite/compile --input=mod.ts --output=.out
 ```
+
+`@clite/compile` 做两件事：
+1. 编译前端文件（ts、js、css、图片、字体），输出文件的名字里带 hash（文件不变，hash 就不会变）
+2. 每次编译会生成一个 meta 文件，记录输出文件的信息（js 和 css 入口、git 版本、编译时间等）
+
+带 hash 的文件名允许[服务器设置永久缓存](https://github.com/ppzreboot/clite/tree/main/module/serve)（`Cache-Control: immutable`）。
+而 meta 文件为这一操作提供必要信息（文件名、路径等）。
 
 ```
 Options:

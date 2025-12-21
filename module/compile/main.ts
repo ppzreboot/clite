@@ -32,7 +32,7 @@ const result = await build({
 	entryPoints: [args.input], // 高贵的简单应用
 	outdir: args.output,
 	publicPath: args.prefix, // https://esbuild.github.io/api/#public-path
-	format: 'esm',
+	format: 'iife',
 	bundle: true,
 	write: false,
 	entryNames: '[name]-[hash]',
