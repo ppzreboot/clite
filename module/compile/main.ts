@@ -33,6 +33,7 @@ const result = await build({
 	outdir: args.output,
 	publicPath: args.prefix, // https://esbuild.github.io/api/#public-path
 	format: 'iife',
+	globalName: 'CLITE',
 	bundle: true,
 	write: false,
 	entryNames: '[name]-[hash]',
